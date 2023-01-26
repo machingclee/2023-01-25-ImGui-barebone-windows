@@ -9,5 +9,5 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
 add_subdirectory(imgui)
 
-target_link_libraries(trial PUBLIC imgui)
+target_link_libraries(trial PUBLIC imgui_lib)
 include(CPack)
