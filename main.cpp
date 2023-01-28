@@ -1,6 +1,8 @@
+#include "capture_utils.h"
 #include "global.h"
 #include "loader.h"
 #include "menu.h"
+#include "settings.h"
 
 /*
 Make sure to compile on x64 Release.
@@ -11,10 +13,11 @@ everything else was coded by xo1337.
 */
 
 ImFont* Consolas = nullptr;
+
 int main(int, char**) {
     WNDCLASSEX wc = {sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(0), 0, 0, 0, 0, "External Menu Base", 0};
     RegisterClassEx(&wc);
-    Window = CreateWindow(wc.lpszClassName, "External Menu Base", WS_POPUP, 0, 0, 5, 5, 0, 0, wc.hInstance, 0);
+    Window = CreateWindow(wc.lpszClassName, "", WS_POPUP, 0, 0, 5, 5, 0, 0, wc.hInstance, 0);
 
     if (!CreateDeviceD3D(Window)) {
         CleanupDeviceD3D();
@@ -42,9 +45,9 @@ int main(int, char**) {
     icons_config.OversampleH = 2.5;
     icons_config.OversampleV = 2.5;
 
-    io.Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(Custom), sizeof(Custom), 21.f, &CustomFont);
-    io.Fonts->AddFontFromMemoryCompressedTTF(font_awesome_data, font_awesome_size, 19.0f, &icons_config, icons_ranges);
-    Consolas = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Consola.ttf", 17);
+    io.Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(Custom), sizeof(Custom), 18.f, &CustomFont);
+    io.Fonts->AddFontFromMemoryCompressedTTF(font_awesome_data, font_awesome_size, 16.0f, &icons_config, icons_ranges);
+    Consolas = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Consola.ttf", 16);
     io.Fonts->AddFontDefault();
 
     ImGuiStyle& style = ImGui::GetStyle();
@@ -70,7 +73,7 @@ int main(int, char**) {
         Menu::Theme();
         static bool p_open = true;
         {
-            ImGui::Begin("HamMafia.co", &p_open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoResize);
+            ImGui::Begin(Settings::applicationTitle, &p_open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoResize);
             {
                 Menu::Render();
             }

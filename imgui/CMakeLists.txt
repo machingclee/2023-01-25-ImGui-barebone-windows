@@ -31,4 +31,5 @@ set(
 )
 
 add_library(imgui_lib ${SOURCES})
+target_link_libraries(imgui_lib PRIVATE ${TORCH_LIBRARIES} opencv_and_torch_lib)
 target_include_directories(imgui_lib PUBLIC ../imgui/include/imgui)

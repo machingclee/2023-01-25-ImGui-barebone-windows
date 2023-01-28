@@ -1,8 +1,10 @@
 {
-  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "files.associations": {
     "*.html": "html",
     "*.ahk": "ahk",
+    "*.rh": "cpp",
+    "xstring": "cpp",
+    "vector": "cpp",
     "algorithm": "cpp",
     "array": "cpp",
     "atomic": "cpp",
@@ -55,7 +57,6 @@
     "unordered_map": "cpp",
     "unordered_set": "cpp",
     "utility": "cpp",
-    "vector": "cpp",
     "xfacet": "cpp",
     "xhash": "cpp",
     "xiosbase": "cpp",
@@ -68,9 +69,25 @@
     "xloctime": "cpp",
     "xmemory": "cpp",
     "xstddef": "cpp",
-    "xstring": "cpp",
     "xtr1common": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
-  }
+    "xutility": "cpp",
+    "bitset": "cpp",
+    "cinttypes": "cpp",
+    "complex": "cpp",
+    "condition_variable": "cpp",
+    "deque": "cpp",
+    "fstream": "cpp",
+    "functional": "cpp",
+    "numeric": "cpp",
+    "queue": "cpp",
+    "random": "cpp",
+    "set": "cpp",
+    "shared_mutex": "cpp",
+    "stack": "cpp",
+    "typeindex": "cpp",
+    "valarray": "cpp",
+    "variant": "cpp"
+  },
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }
