@@ -11,7 +11,7 @@ int start_screen_capture(std::string filename = "./desktop_capture.avi") {
     hwnd2Mat capDesktop(GetDesktopWindow());
 
     cv::VideoWriter writer;
-    int codec = cv::VideoWriter::fourcc('X', 'V', 'I', 'D');
+    int codec = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
     double fps = 10.0;
     writer.open(filename, codec, fps, capDesktop.image.size(), true);
     // check if we succeeded

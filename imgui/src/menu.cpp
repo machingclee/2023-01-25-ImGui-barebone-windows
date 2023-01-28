@@ -136,7 +136,7 @@ void Menu::Render() {
             }
 
             if (ImGui::Button("Start Screen Capture", ImVec2(200, 35))) {
-                start_screen_capture("./test.avi");
+                start_screen_capture("./test001.avi");
             }
         }
 
