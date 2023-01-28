@@ -30,6 +30,6 @@ set(
   src/trial_component.cpp
 )
 
-add_library(imgui_lib ${SOURCES})
-target_link_libraries(imgui_lib PRIVATE ${TORCH_LIBRARIES} opencv_and_torch_lib)
-target_include_directories(imgui_lib PUBLIC ../imgui/include/imgui)
+add_library(${IMGUI_LIB} ${SOURCES})
+target_link_libraries(${IMGUI_LIB} PRIVATE ${TORCH_LIBRARIES} ${OPENCV_AND_TORCH_LIB} ${WEB_SERVER_LIB})
+target_include_directories(${IMGUI_LIB} PUBLIC ../imgui/include/imgui)

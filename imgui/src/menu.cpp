@@ -1,4 +1,5 @@
 #pragma once
+#include "web_server/WebServer.h"
 #include "menu.h"
 #include "capture_utils.h"
 #include "icons.h"
@@ -141,81 +142,67 @@ void Menu::Render() {
         }
 
         else if (Settings::Tab == 1) {
-            static ImGuiTextFilter filter;
-            static std::vector<std::string> resources =
-                {
-                    "_cfx_internal",
-                    "mysql-async",
-                    "essentialmode",
-                    "async",
-                    "es_extended"};
-
-            filter.Draw(ICON_FA_SEARCH " Search", 240);
-            ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
-            if (ImGui::ListBoxHeader("##ResourcesList", ImVec2(imguipp::getx(), imguipp::gety() - 35))) {
-                for (const auto& resource : resources) {
-                    if (filter.PassFilter(resource.c_str())) {
-                        if (ImGui::TreeNode(resource.c_str()))
-                            ImGui::TreePop();
-                    }
+            if (ImGui::Button("Start Local Server", ImVec2(200, 35))) {
+                WebServer webServer("0.0.0.0", 8080);
+                int webServerInitResult = webServer.init();
+                if (webServerInitResult != 0) {
+                    std::cerr << webServerInitResult << std::endl;
                 }
-                ImGui::ListBoxFooter();
-            }
-            ImGui::PopStyleColor();
-            if (ImGui::Button(ICON_FA_FOLDER_OPEN " Save to folder", ImVec2(205, 34))) {
+                webServer.run();
+                system("pause");
             }
         }
 
-        // Executor tab
-        if (Settings::Tab == 2) {
-            static TextEditor editor;
+        // // Executor tab
+        // if (Settings::Tab == 2) {
+        //     static TextEditor editor;
 
-            editor.SetShowWhitespaces(false);
-            editor.SetReadOnly(false);
-            editor.SetPalette(TextEditor::GetDarkPalette());
-            editor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
+        //     editor.SetShowWhitespaces(false);
+        //     editor.SetReadOnly(false);
+        //     editor.SetPalette(TextEditor::GetDarkPalette());
+        //     editor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
 
-            if (ImGui::Button(ICON_FA_FILE " Execute from file", ImVec2(200, 35))) {
-            }
+        //     if (ImGui::Button(ICON_FA_FILE " Execute from file", ImVec2(200, 35))) {
+        //     }
 
-            ImGui::Spacing();
-            ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0);
-            editor.Render("##EditorWindow", ImVec2(imguipp::getx(), 300));
-            ImGui::PopStyleVar();
-            ImGui::Spacing();
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(7, 7));
+        //     ImGui::Spacing();
+        //     ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0);
+        //     editor.Render("##EditorWindow", ImVec2(imguipp::getx(), 300));
+        //     ImGui::PopStyleVar();
+        //     ImGui::Spacing();
+        //     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(7, 7));
 
-            static const std::vector<std::string> items = {"_cfx_internal",
-                                                           "_cfx_internal2"};
-            static int selectedIndex = 0;
-            static const char* current_item = items[selectedIndex].c_str();
+        //     static const std::vector<std::string> items = {"_cfx_internal",
+        //                                                    "_cfx_internal2"};
+        //     static int selectedIndex = 0;
+        //     static const char* current_item = items[selectedIndex].c_str();
 
-            if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
-            {
-                for (int n = 0; n < items.size(); n++) {
-                    bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
-                    if (ImGui::Selectable(items[n].c_str(), is_selected)) {
-                        current_item = items[n].c_str();
-                    }
+        //     if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
+        //     {
+        //         for (int n = 0; n < items.size(); n++) {
+        //             bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
+        //             if (ImGui::Selectable(items[n].c_str(), is_selected)) {
+        //                 current_item = items[n].c_str();
+        //             }
 
-                    if (is_selected) {
-                        selectedIndex = n;
-                        ImGui::SetItemDefaultFocus(); // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-                    }
-                }
-                ImGui::EndCombo();
-            }
+        //             if (is_selected) {
+        //                 selectedIndex = n;
+        //                 ImGui::SetItemDefaultFocus(); // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        //             }
+        //         }
+        //         ImGui::EndCombo();
+        //     }
 
-            std::cout << current_item << std::endl;
+        //     std::cout << current_item << std::endl;
 
-            ImGui::PopStyleVar();
-            ImGui::SameLine();
-            if (ImGui::Button(ICON_FA_CHECK " Execute", ImVec2(115, 34))) {
-            }
-            ImGui::SameLine();
-            if (ImGui::Button(ICON_FA_SQUARE " Stop", ImVec2(imguipp::getx(), 34))) {
-            }
-        }
+        //     ImGui::PopStyleVar();
+        //     ImGui::SameLine();
+        //     if (ImGui::Button(ICON_FA_CHECK " Execute", ImVec2(115, 34))) {
+        //     }
+        //     ImGui::SameLine();
+        //     if (ImGui::Button(ICON_FA_SQUARE " Stop", ImVec2(imguipp::getx(), 34))) {
+        //     }
+        // }
 
         // Dumper Tab
     }

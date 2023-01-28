@@ -4,8 +4,8 @@ add_library(
   capture_utils.h
 )
 
-target_link_libraries(opencv_and_torch_lib ${TORCH_LIBRARIES} ${OpenCV_LIBS})
-target_include_directories(opencv_and_torch_lib PUBLIC ${OpenCV_INCLUDE_DIRS})
-target_include_directories(opencv_and_torch_lib PUBLIC .)
+target_link_libraries(${OPENCV_AND_TORCH_LIB} ${TORCH_LIBRARIES} ${OpenCV_LIBS})
+target_include_directories(${OPENCV_AND_TORCH_LIB} PUBLIC ${OpenCV_INCLUDE_DIRS})
+target_include_directories(${OPENCV_AND_TORCH_LIB} PUBLIC .)
 
-set(TARGET opencv_and_torch_lib PROPERTY CXX_STANDARD 14)
+set(TARGET ${OPENCV_AND_TORCH_LIB} PROPERTY CXX_STANDARD 14)
