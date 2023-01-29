@@ -96,27 +96,17 @@ void Menu::Render() {
         }
 
         else if (Settings::Tab == 1) {
-            static bool start_disabled = false;
-            if (start_disabled) {
-                imguipp::push_gray_style();
-            }
-            if (ImGui::Button("Start Local Server", ImVec2(200, 35))) {
-                WebUtils::start_web_server_thread();
-                start_disabled = true;
-            }
-            if (start_disabled) {
-                imguipp::pop_gray_style();
-            }
-
-            if (!start_disabled) {
-                imguipp::push_gray_style();
-            }
-            if (ImGui::Button("Stop Local Server", ImVec2(200, 35))) {
-                WebUtils::stop_web_server_thread();
-                start_disabled = false;
-            }
-            if (!start_disabled) {
-                imguipp::pop_gray_style();
+            static bool started = false;
+            if (!started) {
+                if (ImGui::Button("Start Local Server", ImVec2(200, 35))) {
+                    WebUtils::start_web_server_thread();
+                    started = true;
+                }
+            } else {
+                if (ImGui::Button("Stop Local Server", ImVec2(200, 35))) {
+                    WebUtils::stop_web_server_thread();
+                    started = false;
+                }
             }
         }
 
