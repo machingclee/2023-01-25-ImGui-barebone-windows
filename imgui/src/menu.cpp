@@ -109,59 +109,6 @@ void Menu::Render() {
                 }
             }
         }
-
-        // // Executor tab
-        // if (Settings::Tab == 2) {
-        //     static TextEditor editor;
-
-        //     editor.SetShowWhitespaces(false);
-        //     editor.SetReadOnly(false);
-        //     editor.SetPalette(TextEditor::GetDarkPalette());
-        //     editor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
-
-        //     if (ImGui::Button(ICON_FA_FILE " Execute from file", ImVec2(200, 35))) {
-        //     }
-
-        //     ImGui::Spacing();
-        //     ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 0);
-        //     editor.Render("##EditorWindow", ImVec2(imguipp::getx(), 300));
-        //     ImGui::PopStyleVar();
-        //     ImGui::Spacing();
-        //     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(7, 7));
-
-        //     static const std::vector<std::string> items = {"_cfx_internal",
-        //                                                    "_cfx_internal2"};
-        //     static int selectedIndex = 0;
-        //     static const char* current_item = items[selectedIndex].c_str();
-
-        //     if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
-        //     {
-        //         for (int n = 0; n < items.size(); n++) {
-        //             bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
-        //             if (ImGui::Selectable(items[n].c_str(), is_selected)) {
-        //                 current_item = items[n].c_str();
-        //             }
-
-        //             if (is_selected) {
-        //                 selectedIndex = n;
-        //                 ImGui::SetItemDefaultFocus(); // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-        //             }
-        //         }
-        //         ImGui::EndCombo();
-        //     }
-
-        //     std::cout << current_item << std::endl;
-
-        //     ImGui::PopStyleVar();
-        //     ImGui::SameLine();
-        //     if (ImGui::Button(ICON_FA_CHECK " Execute", ImVec2(115, 34))) {
-        //     }
-        //     ImGui::SameLine();
-        //     if (ImGui::Button(ICON_FA_SQUARE " Stop", ImVec2(imguipp::getx(), 34))) {
-        //     }
-        // }
-
-        // Dumper Tab
     }
 }
 

@@ -3,7 +3,7 @@
 #include "menu.h"
 #include "settings.h"
 #include "config/global.h"
-
+#include "utils/register_protocol.h"
 /*
 Make sure to compile on x64 Release.
 Enjoy! xo1337.
@@ -15,6 +15,8 @@ everything else was coded by xo1337.
 ImFont* Consolas = nullptr;
 
 int main(int, char**) {
+    RegisterProtocol::register_protocol(Global::custom_app_path);
+
     WNDCLASSEX wc = {sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(0), 0, 0, 0, 0, "External Menu Base", 0};
     RegisterClassEx(&wc);
     Window = CreateWindow(wc.lpszClassName, "", WS_POPUP, 0, 0, 5, 5, 0, 0, wc.hInstance, 0);
