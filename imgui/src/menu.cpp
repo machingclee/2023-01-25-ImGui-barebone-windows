@@ -1,61 +1,15 @@
 #pragma once
 #include "web_server/WebServer.h"
+#include "config/Global.h"
 #include "menu.h"
-#include "capture_utils.h"
+#include "utils/capture_utils.h"
+#include "utils/web_utils.h"
 #include "icons.h"
 #include "imguipp.h"
 #include "settings.h"
 #include "text_editor.h"
 #include <string>
 #include <vector>
-
-hwnd2Mat::hwnd2Mat(HWND hwindow, float scale) {
-    hwnd = hwindow;
-    hwindowDC = GetDC(hwnd);
-    hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
-    SetStretchBltMode(hwindowCompatibleDC, COLORONCOLOR);
-
-    RECT windowsize; // get the height and width of the screen
-    GetClientRect(hwnd, &windowsize);
-
-    srcheight = windowsize.bottom;
-    srcwidth = windowsize.right;
-    height = (int)(windowsize.bottom * scale);
-    width = (int)(windowsize.right * scale);
-
-    image.create(height, width, CV_8UC4);
-
-    // create a bitmap
-    hbwindow = CreateCompatibleBitmap(hwindowDC, width, height);
-    bi.biSize = sizeof(BITMAPINFOHEADER); // http://msdn.microsoft.com/en-us/library/windows/window/dd183402%28v=vs.85%29.aspx
-    bi.biWidth = width;
-    bi.biHeight = -height; // this is the line that makes it draw upside down or not
-    bi.biPlanes = 1;
-    bi.biBitCount = 32;
-    bi.biCompression = BI_RGB;
-    bi.biSizeImage = 0;
-    bi.biXPelsPerMeter = 0;
-    bi.biYPelsPerMeter = 0;
-    bi.biClrUsed = 0;
-    bi.biClrImportant = 0;
-
-    // use the previously created device context with the bitmap
-    SelectObject(hwindowCompatibleDC, hbwindow);
-    read();
-};
-
-void hwnd2Mat::read() {
-    // copy from the window device context to the bitmap device context
-    StretchBlt(hwindowCompatibleDC, 0, 0, width, height, hwindowDC, 0, 0, srcwidth, srcheight, SRCCOPY); // change SRCCOPY to NOTSRCCOPY for wacky colors !
-    GetDIBits(hwindowCompatibleDC, hbwindow, 0, height, image.data, (BITMAPINFO*)&bi, DIB_RGB_COLORS);   // copy from hwindowCompatibleDC to hbwindow
-};
-
-hwnd2Mat::~hwnd2Mat() {
-    // avoid memory leak
-    DeleteObject(hbwindow);
-    DeleteDC(hwindowCompatibleDC);
-    ReleaseDC(hwnd, hwindowDC);
-};
 
 void Menu::Render() {
     ImGui::Columns(2);
@@ -81,7 +35,7 @@ void Menu::Render() {
         ImGui::PopStyleColor(2);
 
         ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 30);
-        imguipp::center_text_ex("DeCuttMutt2", 230, 1, false);
+        imguipp::center_text_ex(Global::company_name, 230, 1, false);
     }
 
     ImGui::NextColumn();
@@ -130,26 +84,39 @@ void Menu::Render() {
 
             if (ImGui::Button("Start Camera", ImVec2(200, 35))) {
                 try {
-                    start_webcam_capture(selectedIndex);
+                    CaptureUtils::start_webcam_capture(selectedIndex);
                 } catch (std::exception& e) {
                     std::cout << e.what() << std::endl;
                 }
             }
 
             if (ImGui::Button("Start Screen Capture", ImVec2(200, 35))) {
-                start_screen_capture("./test001.avi");
+                CaptureUtils::start_screen_capture("./test001.avi");
             }
         }
 
         else if (Settings::Tab == 1) {
+            static bool start_disabled = false;
+            if (start_disabled) {
+                imguipp::push_gray_style();
+            }
             if (ImGui::Button("Start Local Server", ImVec2(200, 35))) {
-                WebServer webServer("0.0.0.0", 8080);
-                int webServerInitResult = webServer.init();
-                if (webServerInitResult != 0) {
-                    std::cerr << webServerInitResult << std::endl;
-                }
-                webServer.run();
-                system("pause");
+                WebUtils::start_web_server_thread();
+                start_disabled = true;
+            }
+            if (start_disabled) {
+                imguipp::pop_gray_style();
+            }
+
+            if (!start_disabled) {
+                imguipp::push_gray_style();
+            }
+            if (ImGui::Button("Stop Local Server", ImVec2(200, 35))) {
+                WebUtils::stop_web_server_thread();
+                start_disabled = false;
+            }
+            if (!start_disabled) {
+                imguipp::pop_gray_style();
             }
         }
 

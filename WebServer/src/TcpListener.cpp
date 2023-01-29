@@ -9,7 +9,7 @@ int TcpListener::init() {
 
     int wsOk = WSAStartup(ver, &wsData);
     if (wsOk != 0) {
-        cerr << "Can't Initialize winsock! Quitting" << endl;
+        std::cerr << "Can't Initialize winsock! Quitting" << std::endl;
         return wsOk;
     }
 
@@ -17,7 +17,7 @@ int TcpListener::init() {
     _socket = socket(AF_INET, SOCK_STREAM, 0);
 
     if (_socket == INVALID_SOCKET) {
-        cerr << "can't create a socket, quitting" << endl;
+        std::cerr << "can't create a socket, quitting" << std::endl;
         return WSAGetLastError();
     }
 
@@ -44,8 +44,8 @@ int TcpListener::init() {
 
     return 0;
 };
-int TcpListener::run() {
-    while (true) {
+int TcpListener::run(std::stop_token stop_token) {
+    while (!stop_token.stop_requested()) {
         fd_set copy = _fd_set;
         int socketCount = select(0, &copy, nullptr, nullptr, nullptr);
         for (int i = 0; i < socketCount; i++) {

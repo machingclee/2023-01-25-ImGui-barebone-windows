@@ -1,4 +1,6 @@
+#pragma once
 #include "global.h"
+#include "utils/common.h"
 
 class TrialComponent {
 public:

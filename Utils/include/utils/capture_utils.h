@@ -1,4 +1,3 @@
-
 #pragma once
 #include "torch/torch.h"
 #include <Windows.h>
@@ -8,6 +7,7 @@
 #include <opencv2/videoio.hpp>
 #include <string>
 
+namespace CaptureUtils {
 class hwnd2Mat {
 public:
     hwnd2Mat(HWND hwindow, float scale = 1);
@@ -25,3 +25,4 @@ private:
 
 int start_webcam_capture(int camera_index);
 int start_screen_capture(std::string filename);
+} // namespace CaptureUtils

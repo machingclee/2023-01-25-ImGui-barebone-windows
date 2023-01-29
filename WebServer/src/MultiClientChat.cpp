@@ -7,7 +7,7 @@ void MultiClientChat::onClientConnected(int clientSocket) {
 };
 
 void MultiClientChat::onClientDisconnected(int clientSocket) {
-    ostringstream ss;
+    std::ostringstream ss;
     ss << "Client #" << clientSocket << " has disconnected";
     std::string msg = ss.str();
     broadcastToClients(clientSocket, msg.c_str(), msg.size() + 1);

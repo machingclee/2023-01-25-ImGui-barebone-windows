@@ -5,8 +5,6 @@ set(
   WebServer.cpp
 )
 
-
-
 add_library(${WEB_SERVER_LIB} ${SOURCE_FILES})
 
 if(WIN32)
@@ -14,4 +12,4 @@ if(WIN32)
 endif()
 
 target_include_directories(${WEB_SERVER_LIB} PUBLIC ../include)
-target_link_libraries(${WEB_SERVER_LIB} PUBLIC ${UTILS_LIB})
+target_link_libraries(${WEB_SERVER_LIB} PRIVATE ${UTILS_LIB})

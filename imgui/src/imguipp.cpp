@@ -82,4 +82,13 @@ ImDrawList* get_drawlist() {
 ImVec4 to_vec4(float r, float g, float b, float a) {
     return ImVec4(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
 }
+
+void push_gray_style() {
+    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+    ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+}
+void pop_gray_style() {
+    ImGui::PopItemFlag();
+    ImGui::PopStyleVar();
+}
 } // namespace imguipp

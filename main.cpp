@@ -1,8 +1,8 @@
-#include "capture_utils.h"
 #include "global.h"
 #include "loader.h"
 #include "menu.h"
 #include "settings.h"
+#include "config/global.h"
 
 /*
 Make sure to compile on x64 Release.
@@ -73,7 +73,7 @@ int main(int, char**) {
         Menu::Theme();
         static bool p_open = true;
         {
-            ImGui::Begin(Settings::applicationTitle, &p_open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoResize);
+            ImGui::Begin(Global::application_title, &p_open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoResize);
             {
                 Menu::Render();
             }

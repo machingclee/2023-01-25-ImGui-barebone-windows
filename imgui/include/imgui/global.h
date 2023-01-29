@@ -16,25 +16,6 @@
 #include <iostream>
 #include <tchar.h>
 
-template <class F, class First, class... Rest>
-void do_for(F f, First first, Rest... rest) {
-    f(first);
-    do_for(f, rest...);
-}
-template <class F>
-
-void do_for(F f) {
-    std::cout << "\n";
-}
-
-template <class... Args>
-void print(Args... args) {
-    do_for([](auto& arg) {
-        std::cout << arg;
-    },
-           args...);
-}
-
 namespace Global {
 
 } // namespace Global

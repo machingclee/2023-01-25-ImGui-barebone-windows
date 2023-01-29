@@ -26,5 +26,7 @@ ImDrawList* get_drawlist();
 } // namespace other
 
 ImVec4 to_vec4(float r, float g, float b, float a);
+void push_gray_style();
+void pop_gray_style();
 
 } // namespace imguipp
