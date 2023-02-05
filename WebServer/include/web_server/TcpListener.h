@@ -7,8 +7,8 @@
 class TcpListener {
 public:
     TcpListener(const char* ipAddress, int port);
-    int init();                          // initialize the listener
-    int run(std::stop_token stop_token); // run the listener
+    int init();                            // initialize the listener
+    int run(std::atomic<bool>& stop_flag); // run the listener
 
 protected:
     virtual void onClientConnected(int clientSocket) = 0;                              // handler for client connection

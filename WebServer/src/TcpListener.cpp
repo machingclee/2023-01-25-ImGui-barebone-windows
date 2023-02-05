@@ -44,8 +44,8 @@ int TcpListener::init() {
 
     return 0;
 };
-int TcpListener::run(std::stop_token stop_token) {
-    while (!stop_token.stop_requested()) {
+int TcpListener::run(std::atomic<bool>& stop_flag) {
+    while (!stop_flag) {
         fd_set copy = _fd_set;
         int socketCount = select(0, &copy, nullptr, nullptr, nullptr);
         for (int i = 0; i < socketCount; i++) {
