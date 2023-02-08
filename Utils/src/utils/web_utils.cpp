@@ -12,12 +12,16 @@ namespace WebUtils {
 
 class MLController : public WebController {
 public:
-    void hello(Request& request, StreamResponse& response) {
+    void start_calibration(Request& request, StreamResponse& response) {
         response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
+    }
+    void collect_data(Request& request, StreamResponse& response) {
+        request.response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
     }
 
     void setup() {
-        addRoute("GET", "/start-calibration", MLController, hello);
+        addRoute("GET", "/start-calibration", MLController, start_calibration);
+        addRoute("POST", "collection-click-data", MLController, collect_data)
     }
 };
 
