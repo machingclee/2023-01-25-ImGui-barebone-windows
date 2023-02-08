@@ -1,31 +1,46 @@
 #include "utils/web_utils.h"
 #include "config/global.h"
+#include <iostream>
+#include <stdlib.h>
+#include <signal.h>
+#include "mongoose/Server.h"
+#include "mongoose/WebController.h"
+
+using namespace Mongoose;
 
 namespace WebUtils {
-static std::atomic<bool> stop_web_service_thread = false;
+
+class MLController : public WebController {
+public:
+    void hello(Request& request, StreamResponse& response) {
+        response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
+    }
+
+    void setup() {
+        addRoute("GET", "/start-calibration", MLController, hello);
+    }
+};
+
+static std::atomic<bool> atomic_stop_web_service_flag = false;
 static std::thread web_server_thread;
 int start_web_server_thread() {
     auto start_web_server = []() {
-        WebServer webServer("0.0.0.0", Global::local_server_port);
-        int webServerInitResult = webServer.init();
-        if (webServerInitResult != 0) {
-            std::cerr << webServerInitResult << std::endl;
+        MLController myController;
+        Server server(8080);
+        server.registerController(&myController);
+        server.start();
+        while (!atomic_stop_web_service_flag) {
+            Sleep(10);
         }
-        print("Started web server at port ", Global::local_server_port);
-        webServer.run(stop_web_service_thread);
     };
-    print("Starting web server");
     web_server_thread = std::thread(start_web_server);
-    print("Started web server");
     return 0;
 };
 
 int stop_web_server_thread() {
-    print("Stopping web server");
-    stop_web_service_thread = true;
+    atomic_stop_web_service_flag = true;
     web_server_thread.join();
-    print("Stopped web server");
-    stop_web_service_thread = false;
+    atomic_stop_web_service_flag = false;
     return 0;
 }
 } // namespace WebUtils
