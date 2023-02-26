@@ -16,7 +16,7 @@ public:
         response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
     }
     void collect_data(Request& request, StreamResponse& response) {
-        request.response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
+        response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
     }
 
     void setup() {

@@ -77,7 +77,10 @@ endif(WIN32)
 
 # Compiling library
 add_library(mongoose ${SOURCES})
-target_include_directories(mongoose PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(mongoose PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:.>
+)
 target_link_libraries(mongoose ${EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
 if(HAS_JSONCPP)
