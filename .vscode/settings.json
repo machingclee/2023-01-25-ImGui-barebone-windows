@@ -89,7 +89,8 @@
     "valarray": "cpp",
     "variant": "cpp",
     "codecvt": "cpp",
-    "*.txt": "cpp"
+    "*.txt": "cpp",
+    "string_view": "cpp"
   },
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "C_Cpp.errorSquiggles": "disabled"
