@@ -12,7 +12,8 @@ from blazehand_landmark import BlazeHandLandmark
 
 from visualization import draw_detections, draw_landmarks, draw_roi, HAND_CONNECTIONS, FACE_CONNECTIONS
 
-gpu = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+# gpu = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+gpu = torch.device("cpu")
 torch.set_grad_enabled(False)
 
 back_detector = False
@@ -26,71 +27,63 @@ face_detector.load_anchors(root_dir + "/anchors_face.npy")
 face_regressor = BlazeFaceLandmark().to(gpu)
 face_regressor.load_weights(root_dir + "/blazeface_landmark.pth")
 
-WINDOW = 'test'
-cv2.namedWindow(WINDOW)
+if __name__ == "__main__":
+    traced_face_detector = torch.jit.trace(face_detector, torch.randn(1, 3, 128, 128), strict=False)
+    traced_face_regressor = torch.jit.trace(face_regressor, torch.randn(1, 3, 192, 192), strict=False)
+    torch.jit.save(traced_face_detector, "cpp_torch_models/face_detector.zip")
+    torch.jit.save(traced_face_regressor, "cpp_torch_models/face_regressor.zip")
 
-if len(sys.argv) > 1:
-    capture = cv2.VideoCapture(sys.argv[1])
-    mirror_img = False
-else:
-    capture = cv2.VideoCapture(1)
-    mirror_img = True
+    # scripted_face_detector = torch.jit.script(face_detector)
+    # scripted_face_regressor = torch.jit.script(face_regressor)
+    # torch.jit.save(scripted_face_detector, 'cpp_torch_models/scripted_face_detector.zip')
+    # torch.jit.save(scripted_face_regressor, 'cpp_torch_models/scripted_face_regressor.zip')
 
-if capture.isOpened():
-    hasFrame, frame = capture.read()
-    frame_ct = 0
-else:
-    hasFrame = False
 
-while hasFrame:
-    frame_ct += 1
+# WINDOW = 'test'
+# cv2.namedWindow(WINDOW)
 
-    if mirror_img:
-        frame = np.ascontiguousarray(frame[:, ::-1, ::-1])
-    else:
-        frame = np.ascontiguousarray(frame[:, :, ::-1])
+# if len(sys.argv) > 1:
+#     capture = cv2.VideoCapture(sys.argv[1])
+#     mirror_img = False
+# else:
+#     capture = cv2.VideoCapture(1)
+#     mirror_img = True
 
-    _, img2, scale, pad = resize_pad(frame)
+# if capture.isOpened():
+#     hasFrame, frame = capture.read()
+#     frame_ct = 0
+# else:
+#     hasFrame = False
 
-    normalized_face_detections = face_detector.predict_on_image(img2)
+# while hasFrame:
+#     frame_ct += 1
 
-    # normalized_palm_detections = palm_detector.predict_on_image(img1)
+#     if mirror_img:
+#         frame = np.ascontiguousarray(frame[:, ::-1, ::-1])
+#     else:
+#         frame = np.ascontiguousarray(frame[:, :, ::-1])
 
-    face_detections = denormalize_detections(normalized_face_detections, scale, pad)
-    # palm_detections = denormalize_detections(normalized_palm_detections, scale, pad)
+#     _, img2, scale, pad = resize_pad(frame)
 
-    xc, yc, scale, theta = face_detector.detection2roi(face_detections.cpu())
-    img, affine, box = face_regressor.extract_roi(frame, xc, yc, theta, scale)
-    flags, normalized_landmarks = face_regressor(img.to(gpu))
-    landmarks = face_regressor.denormalize_landmarks(normalized_landmarks.cpu(), affine)
+#     normalized_face_detections = face_detector.predict_on_image(img2)
+#     face_detections = denormalize_detections(normalized_face_detections, scale, pad)
 
-    # xc, yc, scale, theta = palm_detector.detection2roi(palm_detections.cpu())
-    # img, affine2, box2 = hand_regressor.extract_roi(frame, xc, yc, theta, scale)
-    # flags2, handed2, normalized_landmarks2 = hand_regressor(img.to(gpu))
-    # landmarks2 = hand_regressor.denormalize_landmarks(normalized_landmarks2.cpu(), affine2)
+#     xc, yc, scale, theta = face_detector.detection2roi(face_detections.cpu())
+#     img, affine, box = face_regressor.extract_roi(frame, xc, yc, theta, scale)
+#     flags, normalized_landmarks = face_regressor(img.to(gpu))
+#     landmarks = face_regressor.denormalize_landmarks(normalized_landmarks.cpu(), affine)
 
-    for i in range(len(flags)):
-        landmark, flag = landmarks[i], flags[i]
-        if flag > .5:
-            draw_landmarks(frame, landmark[:, :2], FACE_CONNECTIONS, size=1)
+#     for i in range(len(flags)):
+#         landmark, flag = landmarks[i], flags[i]
+#         if flag > .5:
+#             draw_landmarks(frame, landmark[:, :2], FACE_CONNECTIONS, size=1)
 
-    # for i in range(len(flags2)):
-    #     landmark, flag = landmarks2[i], flags2[i]
-    #     if flag > .5:
-    #         draw_landmarks(frame, landmark[:, :2], HAND_CONNECTIONS, size=2)
+#     cv2.imshow(WINDOW, frame[:, :, ::-1])
 
-    # draw_roi(frame, box)
-    # draw_roi(frame, box2)
-    # draw_detections(frame, face_detections)
-    # draw_detections(frame, palm_detections)
+#     hasFrame, frame = capture.read()
+#     key = cv2.waitKey(1)
+#     if key == 27:
+#         break
 
-    cv2.imshow(WINDOW, frame[:, :, ::-1])
-    # cv2.imwrite('sample/%04d.jpg'%frame_ct, frame[:,:,::-1])
-
-    hasFrame, frame = capture.read()
-    key = cv2.waitKey(1)
-    if key == 27:
-        break
-
-capture.release()
-cv2.destroyAllWindows()
+# capture.release()
+# cv2.destroyAllWindows()

@@ -4,7 +4,7 @@ project(EyeCatching VERSION 0.1.0)
 set(WEB_SERVER_LIB web_server_lib)
 set(UTILS_LIB utils)
 set(IMGUI_LIB imgui_lib)
-set(NUM_CPP NumCpp)
+set(NPY_LIB libnpy)
 set(CONFIG config)
 set(Boost_DEBUG ON)
 set(Boost_USE_STATIC_LIBS ON)
@@ -20,6 +20,8 @@ list(APPEND CMAKE_C_STANDARD_LIBRARIES)
 
 include(cmake/link_opencv_and_torch.cmake)
 
+set(TORCH_LIB ${TORCH_LIBRARIES})
+
 add_executable(EyeCatching main.cpp)
 
 add_subdirectory(mongoose)
@@ -27,8 +29,7 @@ add_subdirectory(config)
 add_subdirectory(WebServer)
 add_subdirectory(utils)
 add_subdirectory(imgui)
-add_subdirectory(numcpp)
-
+add_subdirectory(libnpy)
 add_subdirectory(test)
 
 if (MSVC)
@@ -44,4 +45,3 @@ endif (MSVC)
 target_link_libraries(EyeCatching PUBLIC ${IMGUI_LIB} ${UTILS_LIB} ${CONFIG})
 target_compile_features(${UTILS_LIB} PUBLIC cxx_std_20)
 target_compile_features(${WEB_SERVER_LIB} PUBLIC cxx_std_20)
-target_compile_features(${NUM_CPP} INTERFACE cxx_std_17)
